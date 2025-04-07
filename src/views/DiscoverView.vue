@@ -13,6 +13,8 @@ const handleToolClick = (tool: any) => {
     router.push('/chat/ppt')
   } else if (tool.title === '成绩分析') {
     router.push('/chat/grade')
+  } else if (tool.title === '中小学AI大模型教育教学') {
+    window.location.href = '/src/中小学AI集成.html'
   }
 }
 
@@ -33,6 +35,12 @@ const tools = ref([
     icon: '📈',
     title: '成绩分析',
     description: 'AI智能分析学生成绩数据',
+    isNew: true
+  },
+  {
+    icon: '🎓',
+    title: '中小学AI大模型教育教学',
+    description: 'AI大模型助力中小学教育',
     isNew: true
   },
   {
