@@ -7,11 +7,7 @@ import TopNav from '@/components/TopNav.vue'
 const router = useRouter()
 
 const handleToolClick = (tool: any) => {
-  if (tool.title === '知识库问答') {
-    router.push('/chat/knowledge')
-  } else if (tool.title === 'PPT生成') {
-    router.push('/chat/ppt')
-  } else if (tool.title === '成绩分析') {
+  if (tool.title === '成绩分析') {
     router.push('/chat/grade')
   } else if (tool.title === '成都大学教务管理') {
     window.location.href = 'http://localhost/chat/uLKfjGrUiyBVOVAJ'
@@ -47,18 +43,6 @@ const handleToolClick = (tool: any) => {
 }
 
 const tools = ref([
-  {
-    icon: '📊',
-    title: 'PPT生成',
-    description: 'AI智能生成PPT演示文稿',
-    isNew: true
-  },
-  {
-    icon: '📝',
-    title: '知识库问答',
-    description: '快速解读文档、图片、音视频',
-    isNew: true
-  },
   {
     icon: '📈',
     title: '成绩分析',

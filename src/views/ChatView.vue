@@ -338,17 +338,10 @@ const formatMessage = (content: string) => {
           <div class="action-buttons">
             <button class="action-btn">🎤</button>
             <button class="action-btn">🌐</button>
-            <button class="action-btn">∑</button>
             <button class="action-btn">📊</button>
             <button class="action-btn">↻</button>
             <button class="send-btn" @click="sendMessage">▶</button>
           </div>
-        </div>
-        <div class="terms">
-         
-          <a href="#">隐私政策</a>
-          和
-          <a href="#">用户协议</a>
         </div>
       </div>
     </div>
@@ -579,18 +572,6 @@ const formatMessage = (content: string) => {
   padding: 4px 12px;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.terms {
-  text-align: center;
-  font-size: 12px;
-  color: #909399;
-  margin-top: 8px;
-}
-
-.terms a {
-  color: #1890ff;
-  text-decoration: none;
 }
 
 .knowledge-upload {

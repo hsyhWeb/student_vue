@@ -12,8 +12,8 @@ const menuItems = ref([
 <template>
   <div class="sidebar">
     <div class="logo">
-      <img src="@/assets/ai-logo.svg" alt="AI助手" />
-      <span>AI教师助手</span>
+      <img src="@/assets/images/image.png" alt="AI助手" />
+      <span>大模型教学助手</span>
     </div>
     <nav class="menu">
       <RouterLink
