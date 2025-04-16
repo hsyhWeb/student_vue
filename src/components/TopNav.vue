@@ -1,12 +1,56 @@
 <script setup lang="ts">
-const categories = [
-  { label: '全部', active: true },
-  { label: '教学助手', active: false },
-  { label: '科研助手', active: false },
-  { label: '效率工具', active: false },
-  { label: '其他', active: false },
-  { label: '收藏夹', active: false }
-]
+import { ref, computed } from 'vue'
+
+const emit = defineEmits(['categoryChange', 'search'])
+
+// 从localStorage获取用户角色
+const userRole = computed(() => {
+  const userInfo = localStorage.getItem('userInfo')
+  return userInfo ? JSON.parse(userInfo).role : 'student'
+})
+
+// 动态生成分类
+const allCategories = ref([
+  { label: '全部', value: 'all', roles: ['admin', 'teacher', 'student'] },
+  { label: '教学助手', value: 'teaching', roles: ['admin', 'teacher'] },
+  { label: '学生助手', value: 'student', roles: ['admin', 'student'] },
+  { label: '管理助手', value: 'management', roles: ['admin'] },
+  { label: '评价助手', value: 'evaluation', roles: ['admin', 'teacher'] },
+  { label: '工具', value: 'tools', roles: ['admin'] }
+])
+
+// 过滤可见分类
+const visibleCategories = computed(() => {
+  return allCategories.value.filter(cat => 
+    cat.value === 'all' || 
+    (cat.roles && cat.roles.includes(userRole.value))
+  )
+})
+
+// 初始化分类状态
+const categories = ref(visibleCategories.value.map(cat => ({
+  ...cat,
+  active: cat.value === 'all'
+})))
+
+const searchQuery = ref('')
+
+const handleCategoryClick = (cat: any) => {
+  categories.value.forEach(c => c.active = false)
+  cat.active = true
+  searchQuery.value = ''
+  emit('categoryChange', cat.value)
+  emit('search', '')
+}
+
+const handleSearch = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  searchQuery.value = target.value
+  if (target.value) {
+    categories.value.forEach(c => c.active = c.value === 'all')
+  }
+  emit('search', target.value)
+}
 </script>
 
 <template>
@@ -17,12 +61,18 @@ const categories = [
         :key="index"
         class="nav-btn"
         :class="{ active: cat.active }"
+        @click="handleCategoryClick(cat)"
       >
         {{ cat.label }}
       </button>
     </nav>
     <div class="search">
-      <input type="text" placeholder="搜索工具" />
+      <input 
+        type="text" 
+        placeholder="搜索工具" 
+        :value="searchQuery"
+        @input="handleSearch"
+      />
       <span class="help-icon">?</span>
     </div>
   </div>

@@ -160,37 +160,58 @@ const analyzeGrade = async (message: string, file?: File) => {
       });
     }
 
-    const formData = new FormData();
-    formData.append('message', message);
-    if (file) {
-      formData.append('file', file);
-    }
-
-    const response = await fetch('http://127.0.0.1:5002/upload_message', {
+    // First request to get workflow_run_id
+    const firstResponse = await fetch('http://localhost/v1/workflows/run', {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer app-5YJcLvqCYlVqZ38F5kCm8Fwd',
         'Accept': 'application/json',
       },
       mode: 'cors',
       credentials: 'include',
-      body: formData,
+      body: JSON.stringify({
+        inputs: {
+          input: message
+        },
+        response_mode: "streaming",
+        user: "abc-123"
+      }),
     });
 
-    if (!response.ok) {
-      throw new Error(`分析失败: ${response.status} ${response.statusText}`);
+    if (!firstResponse.ok) {
+      throw new Error(`分析失败: ${firstResponse.status} ${firstResponse.statusText}`);
     }
 
-    const data = await response.json();
+    const firstData = await firstResponse.json();
+    const workflowRunId = firstData[0].workflow_run_id;
+
+    // Second request using the workflow_run_id
+    const secondResponse = await fetch(`http://localhost/v1/workflows/run/${workflowRunId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer app-5YJcLvqCYlVqZ38F5kCm8Fwd',
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+    });
+
+    if (!secondResponse.ok) {
+      throw new Error(`获取结果失败: ${secondResponse.status} ${secondResponse.statusText}`);
+    }
+
+    const secondData = await secondResponse.json();
 
     if (currentChat.value) {
       currentChat.value.messages.push({
         role: 'system',
-        content: data.message,
+        content: secondData.message || '分析完成',
         type: 'text'
       });
     }
 
-    return data;
+    return secondData;
   } catch (error) {
     console.error('分析成绩时出错:', error);
     if (currentChat.value) {

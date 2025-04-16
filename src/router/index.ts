@@ -1,16 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
+import DiscoverView from '../views/DiscoverView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/discover'
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     {
       path: '/discover',
       name: 'discover',
-      component: () => import('../views/DiscoverView.vue')
+      component: DiscoverView
     },
     {
       path: '/chat',
@@ -41,6 +54,11 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue')
+    },
+    {
+      path: '/edit-profile',
+      name: 'edit-profile',
+      component: () => import('../views/EditProfileView.vue')
     }
   ]
 })

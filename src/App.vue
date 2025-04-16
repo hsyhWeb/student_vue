@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import SideBar from './components/SideBar.vue'
+import { computed } from 'vue'
+
+const route = useRoute()
+const showSidebar = computed(() => route.path !== '/login' && route.path !== '/register')
 </script>
 
 <template>
   <div class="app-container">
-    <SideBar class="sidebar" />
-    <div class="main-content">
+    <SideBar v-if="showSidebar" class="sidebar" />
+    <div class="main-content" :class="{ 'login-page': route.path === '/login' || route.path === '/register' }">
       <RouterView />
     </div>
   </div>
@@ -26,6 +30,9 @@ import SideBar from './components/SideBar.vue'
 
 .main-content {
   flex: 1;
+}
+
+.main-content:not(.login-page) {
   padding: 20px;
 }
 </style>
